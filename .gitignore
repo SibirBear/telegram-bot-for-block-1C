@@ -21,4 +21,7 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# After configure project
 /.idea/
+/src/main/resources/config.properties
