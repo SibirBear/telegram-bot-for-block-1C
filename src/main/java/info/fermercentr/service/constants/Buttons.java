@@ -2,7 +2,7 @@ package info.fermercentr.service.constants;
 
 public enum Buttons {
 
-    ONE("1️⃣"),
+/*    ONE("1️⃣"),
     TWO("2️⃣"),
     THREE("3️⃣"),
     FOUR("4️⃣"),
@@ -11,7 +11,19 @@ public enum Buttons {
     SEVEN("7️⃣"),
     EIGHT("8️⃣"),
     NINE("9️⃣"),
-    ZERO("0️⃣"),
+    ZERO("0️⃣"),*/
+
+    ONE("1"),
+    TWO("2"),
+    THREE("3"),
+    FOUR("4"),
+    FIVE("5"),
+    SIX("6"),
+    SEVEN("7"),
+    EIGHT("8"),
+    NINE("9"),
+    ZERO("0"),
+
     ENTER("✅"),
     DELETE("⬅️");
 

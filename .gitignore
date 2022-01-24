@@ -25,3 +25,5 @@ hs_err_pid*
 # After configure project
 /.idea/
 /src/main/resources/config.properties
+/docs/
+

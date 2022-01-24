@@ -26,9 +26,9 @@ public class ButtonsBotService {
                         createInlineButton(Buttons.NINE.getButtonName(), CoreBotConstants.NINE)
                 ),
                 createInlineRowButton(
-                        createInlineButton(Buttons.ENTER.getButtonName(), CoreBotConstants.ENTER),
+                        createInlineButton(Buttons.DELETE.getButtonName(), CoreBotConstants.DELETE),
                         createInlineButton(Buttons.ZERO.getButtonName(), CoreBotConstants.ZERO),
-                        createInlineButton(Buttons.DELETE.getButtonName(), CoreBotConstants.DELETE)
+                        createInlineButton(Buttons.ENTER.getButtonName(), CoreBotConstants.ENTER)
                 )
         );
     }
