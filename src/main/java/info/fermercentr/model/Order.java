@@ -8,12 +8,8 @@ public class Order {
     private String date;
     private String time;
 
-    public Order(String idClient, Steps currentStep, boolean actionBlock, String date, String time) {
-        this.idClient = idClient;
+    public Order(Steps currentStep) {
         this.currentStep = currentStep;
-        this.actionBlock = actionBlock;
-        this.date = date;
-        this.time = time;
     }
 
     public String getIdClient() {
