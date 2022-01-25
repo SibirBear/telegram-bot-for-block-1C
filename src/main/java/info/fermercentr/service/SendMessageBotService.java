@@ -1,11 +1,11 @@
 package info.fermercentr.service;
 
+import info.fermercentr.service.constants.SendMessageText;
+import info.fermercentr.store.SessionData;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-
-import static java.lang.Math.toIntExact;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 
 public class SendMessageBotService {
 
@@ -18,35 +18,45 @@ public class SendMessageBotService {
         return sendMessage;
     }
 
-    public SendMessage createMessageWithKeyboard(Update update, String text) {
-        SendMessage sendMessage = createSimpleMessage(update, text);
-        sendMessage.setReplyMarkup(button.keyboardNineNumber());
+    //Простое сообщение с меню
+    private SendMessage createMessageWithKeyboard(Update update, String text, ReplyKeyboardMarkup keyboard) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+        sendMessage.setText(text);
+        sendMessage.setReplyMarkup(keyboard);
         return sendMessage;
     }
 
-    public EditMessageText editSimpleMessage(Update update, String text) {
-        EditMessageText message = new EditMessageText();
-        message.setMessageId(toIntExact(update.getCallbackQuery().getMessage().getMessageId()));
-        message.setChatId(String.valueOf(update.getCallbackQuery().getMessage().getChatId()));
-        message.setText(text);
+    public SendMessage startMessage(Update update) {
+        return createSimpleMessage(update, "Добрый день, " + update.getMessage().getFrom().getFirstName() + "!");
+    }
+
+    public SendMessage accessDenied(Update update) {
+        return createSimpleMessage(update, SendMessageText.ACCESS_DENIED);
+    }
+
+    public SendMessage enterClientId(Update update) {
+        return createSimpleMessage(update,
+                update.getMessage().getFrom().getFirstName()
+                        + ", " + SendMessageText.ENTER_CLIENT_ID);
+    }
+
+    public SendMessage blockMessage(Update update) {
+        return createMessageWithKeyboard(update,
+                SendMessageText.BLOCK_MESSAGE, button.createBlockMessage());
+    }
+
+    public SendMessage dateMessage(Update update) {
+        SendMessage message = createSimpleMessage(update, SendMessageText.DATE_MESSAGE);
+        message.setReplyMarkup(new ReplyKeyboardRemove(true));
         return message;
     }
 
-    public EditMessageText editMessageWithKeyboard(Update update, String text, InlineKeyboardMarkup keyboard) {
-        EditMessageText message = editSimpleMessage(update, text);
-        message.setReplyMarkup(keyboard);
-        return message;
+    public SendMessage timeMessage(Update update) {
+        return createSimpleMessage(update, SendMessageText.TIME_MESSAGE);
     }
 
-    public EditMessageText editNinekeyboard(Update update, String result) {
-        return editMessageWithKeyboard(update,
-                "Введите ЦФУ, нажав на кнопки ниже\nВы ввели: " + result,
-                button.keyboardNineNumber());
+    public SendMessage resultMessage(Update update, long userId, SessionData sd) {
+        return createSimpleMessage(update, "Вы ввели:\n" + sd.getOrder(userId).toString());
     }
-
-    public EditMessageText editNinekeyboardEnd(Update update, String result) {
-        return editSimpleMessage(update,
-                "Вы указали ЦФУ: " + result);
-    }
-
 }

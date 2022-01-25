@@ -7,6 +7,7 @@ public class Order {
     private boolean actionBlock;
     private String date;
     private String time;
+    private OData odata;
 
     public Order(Steps currentStep) {
         this.currentStep = currentStep;
@@ -22,6 +23,10 @@ public class Order {
 
     public boolean isActionBlock() {
         return actionBlock;
+    }
+
+    public OData getOdata() {
+        return odata;
     }
 
     public String getDate() {
@@ -44,11 +49,24 @@ public class Order {
         this.actionBlock = actionBlock;
     }
 
+    public void setOdata(OData odata) {
+        this.odata = odata;
+    }
+
     public void setDate(String date) {
         this.date = date;
     }
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    @Override
+    public String toString() {
+        return  "Клиент = " + idClient + "\n" +
+                //"Блокировать = " + actionBlock + "\n" +
+                (actionBlock ? "Заблокировать" : "Разблокировать") + "\n" +
+                "Дата = " + date + "\n" +
+                "Время = " + time;
     }
 }
