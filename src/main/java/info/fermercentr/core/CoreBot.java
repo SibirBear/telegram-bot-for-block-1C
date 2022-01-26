@@ -14,18 +14,18 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
 import java.util.List;
+
 
 import static info.fermercentr.core.CoreBotConstants.*;
 import static info.fermercentr.model.Steps.STEP5;
-import static info.fermercentr.service.constants.Buttons.BLOCK;
-import static info.fermercentr.service.constants.Buttons.UNBLOCK;
+import static info.fermercentr.service.constants.Buttons.*;
 
 public class CoreBot extends TelegramLongPollingBot {
 
     private final String token = Config.getConfigTelegramSettings().getToken();
     private final String botName = Config.getConfigTelegramSettings().getBotName();
+    private final Long groupId = Long.parseLong(Config.getConfigTelegramSettings().getGroup());
     private final SendMessageBotService sendMessageBotService = new SendMessageBotService();
     private final SessionData sd = new SessionData();
     private final DataBaseService dbs = new DataBaseService();
@@ -33,7 +33,10 @@ public class CoreBot extends TelegramLongPollingBot {
     @Override
     public synchronized void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            if (update.getMessage().getChatId() == -707127414) {
+            if (groupId.equals(update.getMessage().getChatId() )) {
+                if (REPORT.equals(update.getMessage().getText())) {
+                    executeMessage(sendMessageBotService.createSimpleMessage(update, "report map:\n" + sd));
+                }
                 if (START.equals(update.getMessage().getText())) {
                     executeMessage(sendMessageBotService.startMessage(update));
                     executeMessage(sendMessageBotService.createSimpleMessage(update, "Ваш id: " + update.getMessage().getFrom().getId()));
@@ -53,6 +56,11 @@ public class CoreBot extends TelegramLongPollingBot {
         }
 
         Steps currentStep = sd.getOrder(userId).getCurrentStep();
+
+        if (CANCEL_APP.equals(update.getMessage().getText())) {
+            sd.remove(userId);
+            executeMessage(sendMessageBotService.createSimpleMessage(update, "Действие отменено"));
+        }
 
         switch(currentStep) {
             case STEP1:
@@ -75,18 +83,15 @@ public class CoreBot extends TelegramLongPollingBot {
 
             case STEP3:
                 String selected = update.getMessage().getText();
+                sd.getOrder(userId).setCurrentStep(Steps.STEP4);
+                executeMessage(sendMessageBotService.dateMessage(update));
                 switch (selected) {
                     case BLOCK:
                         sd.getOrder(userId).setActionBlock(true);
-                        sd.getOrder(userId).setCurrentStep(Steps.STEP4);
-                        executeMessage(sendMessageBotService.dateMessage(update));
                         break;
 
                     case UNBLOCK:
                         sd.getOrder(userId).setActionBlock(false);
-                        sd.getOrder(userId).setCurrentStep(Steps.STEP4);
-                        executeMessage(sendMessageBotService.dateMessage(update));
-                        break;
                 }
                 break;
 
@@ -100,7 +105,6 @@ public class CoreBot extends TelegramLongPollingBot {
                     } else {
                         sd.getOrder(userId).setCurrentStep(Steps.STEP6);
                         executeMessage(sendMessageBotService.resultMessage(update, userId, sd));
-                        //подтверждение
                     }
 
                 } else {
@@ -114,16 +118,23 @@ public class CoreBot extends TelegramLongPollingBot {
                     sd.getOrder(userId).setTime(time);
                     sd.getOrder(userId).setCurrentStep(Steps.STEP6);
                     executeMessage(sendMessageBotService.resultMessage(update, userId, sd));
-                    //подтверждение
                 } else {
                     executeMessage(sendMessageBotService.invalidTime(update));
                 }
                 break;
 
             case STEP6:
-                executeMessage(sendMessageBotService.createSimpleMessage(update, "КОНЕЦ СКРИПТА"));
+                String approve = update.getMessage().getText();
+                if (approve.equals(OK)) {
+                    executeMessage(sendMessageBotService.createSimpleMessage(update, "Введенные данные успешно применены."));
+                } else {
+                    executeMessage(sendMessageBotService.createSimpleMessage(update, "Отменено."));
+                }
+                sd.remove(userId);
                 break;
+
         }
+
     }
 
     private void executeMessage(SendMessage sendMessage) {

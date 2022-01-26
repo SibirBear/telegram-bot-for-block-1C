@@ -15,6 +15,7 @@ public class SendMessageBotService {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
         sendMessage.setText(text);
+        sendMessage.setReplyMarkup(new ReplyKeyboardRemove(true));
         return sendMessage;
     }
 
@@ -56,10 +57,6 @@ public class SendMessageBotService {
         return createSimpleMessage(update, SendMessageText.TIME_MESSAGE);
     }
 
-    public SendMessage resultMessage(Update update, long userId, SessionData sd) {
-        return createSimpleMessage(update, "Вы ввели:\n" + sd.getOrder(userId).toString());
-    }
-
     public SendMessage invalidDate(Update update) {
         return createSimpleMessage(update, SendMessageText.DATE_INVALID);
     }
@@ -70,5 +67,11 @@ public class SendMessageBotService {
 
     public SendMessage enterClientIdError(Update update) {
         return createSimpleMessage(update, SendMessageText.ENTER_CLIENT_ID_ERROR);
+    }
+
+    public SendMessage resultMessage(Update update, long userId, SessionData sd) {
+        return createMessageWithKeyboard(update,
+                "Вы ввели:\n" + sd.getOrder(userId).toString() + "\n\nПрименить?",
+                button.createSelectMessage());
     }
 }

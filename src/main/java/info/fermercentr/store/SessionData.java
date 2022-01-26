@@ -1,10 +1,10 @@
 package info.fermercentr.store;
 
 import info.fermercentr.model.Order;
-import info.fermercentr.model.Steps;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SessionData {
 
@@ -22,4 +22,18 @@ public class SessionData {
         return sessionData.containsKey(userId);
     }
 
+    public boolean remove(final long userId) {
+        if (this.sessionData.containsKey(userId) || !this.sessionData.isEmpty()) {
+            this.sessionData.remove(userId);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return sessionData.keySet().stream()
+                .map(key -> key + "=" + sessionData.get(key))
+                .collect(Collectors.joining(", ", "{", "}"));
+    }
 }

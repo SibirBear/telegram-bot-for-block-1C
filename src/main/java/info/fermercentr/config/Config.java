@@ -19,11 +19,12 @@ public class Config {
 
         String token = properties.getProperty("TOKEN");
         String botName = properties.getProperty("BOTNAME");
+        String groupId = properties.getProperty("GROUP");
         String host = properties.getProperty("HOST");
         String user = properties.getProperty("USER");
         String psw = properties.getProperty("PSW");
 
-        configTelegramSettings = new ConfigTelegramSettings(token, botName);
+        configTelegramSettings = new ConfigTelegramSettings(token, botName, groupId);
         configDB = new ConfigDB(host, user, psw);
 
         return config;

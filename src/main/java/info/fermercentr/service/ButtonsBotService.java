@@ -15,4 +15,10 @@ public class ButtonsBotService {
                         createRowButtons(Arrays.asList(Buttons.BLOCK, Buttons.UNBLOCK))));
     }
 
+    public ReplyKeyboardMarkup createSelectMessage() {
+        return setKeyboardMessage(
+                createRowButtonList(
+                        createRowButtons(Arrays.asList(Buttons.OK, Buttons.CANCEL))));
+    }
+
 }
