@@ -63,10 +63,14 @@ public class CoreBot extends TelegramLongPollingBot {
             case STEP2:
                 String idClient = update.getMessage().getText();
                 List<String> data = dbs.getData(idClient);
-                sd.getOrder(userId).setOdata(new OData(data.get(0), data.get(1), data.get(2)));
-                sd.getOrder(userId).setIdClient(idClient);
-                sd.getOrder(userId).setCurrentStep(Steps.STEP3);
-                executeMessage(sendMessageBotService.blockMessage(update));
+                if (data.size() > 0) {
+                    sd.getOrder(userId).setOdata(new OData(data.get(0), data.get(1), data.get(2)));
+                    sd.getOrder(userId).setIdClient(idClient);
+                    sd.getOrder(userId).setCurrentStep(Steps.STEP3);
+                    executeMessage(sendMessageBotService.blockMessage(update));
+                } else {
+                    executeMessage(sendMessageBotService.enterClientIdError(update));
+                }
                 break;
 
             case STEP3:
@@ -106,7 +110,7 @@ public class CoreBot extends TelegramLongPollingBot {
 
             case STEP5:
                 String time = update.getMessage().getText();
-                if (CheckDateTime.validate(time)) {
+                if (CheckDateTime.validate(time, sd.getOrder(userId).getDate())) {
                     sd.getOrder(userId).setTime(time);
                     sd.getOrder(userId).setCurrentStep(Steps.STEP6);
                     executeMessage(sendMessageBotService.resultMessage(update, userId, sd));

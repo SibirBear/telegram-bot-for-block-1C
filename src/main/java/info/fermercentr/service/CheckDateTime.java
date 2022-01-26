@@ -1,6 +1,7 @@
 package info.fermercentr.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,20 +23,22 @@ public class CheckDateTime {
     private final static long ADD_DAYS = 30;
     private final static long MINUS_DAYS = 1;
 
-    //Основной метод проверки
+    //Основной метод проверки даты
     public static boolean validate(final String value) {
         if (value == null) return false;
-        if (value.length() == 5) {
-            return checkTime(value);
-        } else if (value.length() == 10) {
-            return checkDate(value);
-        }
+        if (value.length() == 10) return checkDate(value);
+        return false;
+    }
 
+    //Основной метод проверки времени
+    public static boolean validate(final String value, final String date) {
+        if (value == null) return false;
+        if (value.length() == 5) return checkTime(value, date);
         return false;
     }
 
     //Проверяем корректность ввода времени по необходимой маске
-    private static boolean checkTime(final String time) {
+    private static boolean checkTime(final String time, final String date) {
         Pattern pattern = Pattern.compile(TIME_PATTERN);  //инициализация маски в шаблон для проверки
         Matcher matcher = pattern.matcher(time);  //создание шаблона для проверки на основании инициализированной маски
 
@@ -44,11 +47,13 @@ public class CheckDateTime {
         int hours = Integer.parseInt(matcher.group(1));  //записываем 1ю группу данных по маске из переданного значения
         int minutes = Integer.parseInt(matcher.group(2)); //записываем 2ю группу данных по маске из переданного значения
 
+        if (hours < MIN_TIME || hours > MAX_HOUR
+                || minutes < MIN_TIME || minutes > MAX_MINUTE) return false;
+
         // в последнем выражении проверяем что введенное время больше текущего
         // более чем на ХХ минуты. ХХ определяется константой.
-        return (hours >= MIN_TIME && hours < MAX_HOUR)
-                && (minutes >= MIN_TIME && minutes <= MAX_MINUTE)
-                && (LocalTime.parse(time).isAfter(LocalTime.now().plusMinutes(ADD_MINUTES)));
+        return LocalDateTime.of(LocalDate.parse(date), LocalTime.parse(time))
+                .isAfter(LocalDateTime.now().plusMinutes(ADD_MINUTES).withSecond(0).withNano(0));
 
     }
 
@@ -62,11 +67,12 @@ public class CheckDateTime {
         int month = Integer.parseInt(matcher.group(2));
         int day = Integer.parseInt(matcher.group(3));
 
+        if (month < LocalDate.MIN.getMonthValue() || month > LocalDate.MAX.getMonthValue()
+                || day < LocalDate.MIN.getDayOfMonth() || day > LocalDate.MAX.getDayOfMonth()) return false;
+
         // в последнем выражении проверяем что введенная дата не больше текущей
         // более чем на XX дней. ХХ определяется константой.
-        return (month >= LocalDate.MIN.getMonthValue() && month <= LocalDate.MAX.getMonthValue()
-                || day >= LocalDate.MIN.getDayOfMonth() && day <= LocalDate.MAX.getDayOfMonth())
-                && (LocalDate.parse(date).isBefore(LocalDate.now().plusDays(ADD_DAYS)))
+        return (LocalDate.parse(date).isBefore(LocalDate.now().plusDays(ADD_DAYS)))
                 && (LocalDate.parse(date).isAfter(LocalDate.now().minusDays(MINUS_DAYS)));
     }
 

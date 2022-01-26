@@ -67,4 +67,8 @@ public class SendMessageBotService {
     public SendMessage invalidTime(Update update) {
         return createSimpleMessage(update, SendMessageText.TIME_INVALID);
     }
+
+    public SendMessage enterClientIdError(Update update) {
+        return createSimpleMessage(update, SendMessageText.ENTER_CLIENT_ID_ERROR);
+    }
 }
