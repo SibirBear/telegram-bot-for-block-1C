@@ -4,6 +4,7 @@ import info.fermercentr.config.Config;
 import info.fermercentr.model.OData;
 import info.fermercentr.model.Order;
 import info.fermercentr.model.Steps;
+import info.fermercentr.service.CheckDateTime;
 import info.fermercentr.service.DataBaseService;
 import info.fermercentr.service.SendMessageBotService;
 import info.fermercentr.store.SessionData;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static info.fermercentr.core.CoreBotConstants.*;
+import static info.fermercentr.model.Steps.STEP5;
 import static info.fermercentr.service.constants.Buttons.BLOCK;
 import static info.fermercentr.service.constants.Buttons.UNBLOCK;
 
@@ -86,23 +88,32 @@ public class CoreBot extends TelegramLongPollingBot {
 
             case STEP4:
                 String date = update.getMessage().getText();
-                sd.getOrder(userId).setDate(date);
-                if (sd.getOrder(userId).isActionBlock()) {
-                    sd.getOrder(userId).setCurrentStep(Steps.STEP5);
-                    executeMessage(sendMessageBotService.timeMessage(update));
+                if (CheckDateTime.validate(date)) {
+                    sd.getOrder(userId).setDate(date);
+                    if (sd.getOrder(userId).isActionBlock()) {
+                        sd.getOrder(userId).setCurrentStep(STEP5);
+                        executeMessage(sendMessageBotService.timeMessage(update));
+                    } else {
+                        sd.getOrder(userId).setCurrentStep(Steps.STEP6);
+                        executeMessage(sendMessageBotService.resultMessage(update, userId, sd));
+                        //подтверждение
+                    }
+
                 } else {
-                    sd.getOrder(userId).setCurrentStep(Steps.STEP6);
-                    executeMessage(sendMessageBotService.resultMessage(update, userId, sd));
-                    //подтверждение
+                    executeMessage(sendMessageBotService.invalidDate(update));
                 }
                 break;
 
             case STEP5:
                 String time = update.getMessage().getText();
-                sd.getOrder(userId).setTime(time);
-                sd.getOrder(userId).setCurrentStep(Steps.STEP6);
-                executeMessage(sendMessageBotService.resultMessage(update, userId, sd));
-                //подтверждение
+                if (CheckDateTime.validate(time)) {
+                    sd.getOrder(userId).setTime(time);
+                    sd.getOrder(userId).setCurrentStep(Steps.STEP6);
+                    executeMessage(sendMessageBotService.resultMessage(update, userId, sd));
+                    //подтверждение
+                } else {
+                    executeMessage(sendMessageBotService.invalidTime(update));
+                }
                 break;
 
             case STEP6:

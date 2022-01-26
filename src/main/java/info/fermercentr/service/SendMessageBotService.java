@@ -59,4 +59,12 @@ public class SendMessageBotService {
     public SendMessage resultMessage(Update update, long userId, SessionData sd) {
         return createSimpleMessage(update, "Вы ввели:\n" + sd.getOrder(userId).toString());
     }
+
+    public SendMessage invalidDate(Update update) {
+        return createSimpleMessage(update, SendMessageText.DATE_INVALID);
+    }
+
+    public SendMessage invalidTime(Update update) {
+        return createSimpleMessage(update, SendMessageText.TIME_INVALID);
+    }
 }

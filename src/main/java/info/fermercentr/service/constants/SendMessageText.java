@@ -5,5 +5,7 @@ public class SendMessageText {
     public static final String ENTER_CLIENT_ID = "Введите код клиента";
     public static final String BLOCK_MESSAGE = "Выберите действие, которое хотите выполнить.\nНажмите одну из кнопок.";
     public static final String DATE_MESSAGE = "Укажите дату начала выбранного действия.\nФормат ввода даты: ГГГГ-ММ-ДД";
-    public static final String TIME_MESSAGE = "Укажите время начала блокировки.\nФормат ввода времени(24ч): ЧЧ-ММ";
+    public static final String DATE_INVALID = "Не верный формат даты!\nДолжен быть: ГГГГ-ММ-ДД.";
+    public static final String TIME_MESSAGE = "Укажите время начала блокировки.\nФормат ввода времени(24ч): ЧЧ:ММ";
+    public static final String TIME_INVALID = "Не верный формат времени!\nДолжен быть: ЧЧ:ММ.";
 }
