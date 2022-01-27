@@ -1,15 +1,15 @@
 package info.fermercentr.config;
 
-public class ConfigDB {
+public final class ConfigDB {
 
     private final String host;
     private final String user;
     private final String psw;
 
-    public ConfigDB(final String host, final String user, final String psw) {
-        this.host = host;
-        this.user = user;
-        this.psw = psw;
+    public ConfigDB(final String phost, final String puser, final String ppsw) {
+        this.host = phost;
+        this.user = puser;
+        this.psw = ppsw;
     }
 
     public String getHost() {

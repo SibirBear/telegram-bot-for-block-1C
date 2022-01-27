@@ -2,11 +2,15 @@ package info.fermercentr.service;
 
 import info.fermercentr.config.Config;
 
-import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataBaseService {
+public final class DataBaseService {
 
     private final String url = Config.getConfigDB().getHost();
     private final String user = Config.getConfigDB().getUser();
@@ -19,15 +23,18 @@ public class DataBaseService {
 
         String query = "call select_connection(" + idClient + ")";
 
-        try(Connection con = connect()) {
+        try (Connection con = connect()) {
             stmt = con.createStatement();
             rs = stmt.executeQuery(query);
 
+            int i = 1;
             while (rs.next()) {
-                result.add(rs.getString(1));
-                result.add(rs.getString(2));
-                result.add(rs.getString(3));
+                result.add(rs.getString(i));
+                i++;
+//                result.add(rs.getString(2));
+//                result.add(rs.getString(3));
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

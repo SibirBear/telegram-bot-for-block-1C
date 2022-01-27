@@ -7,9 +7,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 
-public class SendMessageBotService {
+public final class SendMessageBotService {
 
-    ButtonsBotService button = new ButtonsBotService();
+    private ButtonsBotService button = new ButtonsBotService();
 
     public SendMessage createSimpleMessage(Update update, String text) {
         SendMessage sendMessage = new SendMessage();

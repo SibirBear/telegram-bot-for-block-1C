@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 */
 public class CheckDateTime {
     //Маски ввода
-    private final static String TIME_PATTERN = "(\\d{2})[:](\\d{2})";
+    private static final String TIME_PATTERN = "(\\d{2})[:](\\d{2})";
     private final static String DATE_PATTERN = "(\\d{4})[-](\\d{2})[-](\\w{2})";
 
     //Константы класса

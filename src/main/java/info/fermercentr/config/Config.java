@@ -11,7 +11,7 @@ public class Config {
     private static Config config;
 
     private static Config read(final Properties properties) {
-        try(InputStream is = Config.class.getClassLoader().getResourceAsStream("config.properties")) {
+        try (InputStream is = Config.class.getClassLoader().getResourceAsStream("config.properties")) {
             properties.load(is);
         } catch (IOException e) {
             e.printStackTrace();
