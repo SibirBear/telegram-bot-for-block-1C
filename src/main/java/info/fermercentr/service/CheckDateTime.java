@@ -13,15 +13,15 @@ import java.util.regex.Pattern;
 public class CheckDateTime {
     //Маски ввода
     private static final String TIME_PATTERN = "(\\d{2})[:](\\d{2})";
-    private final static String DATE_PATTERN = "(\\d{4})[-](\\d{2})[-](\\w{2})";
+    private static final String DATE_PATTERN = "(\\d{4})[-](\\d{2})[-](\\w{2})";
 
     //Константы класса
-    private final static int MIN_TIME = 0;
-    private final static int MAX_HOUR = 24;
-    private final static int MAX_MINUTE = 59;
-    private final static long ADD_MINUTES = 4;
-    private final static long ADD_DAYS = 30;
-    private final static long MINUS_DAYS = 1;
+    private static final int MIN_TIME = 0;
+    private static final int MAX_HOUR = 24;
+    private static final int MAX_MINUTE = 59;
+    private static final long ADD_MINUTES = 4;
+    private static final long ADD_DAYS = 30;
+    private static final long MINUS_DAYS = 1;
 
     //Основной метод проверки даты
     public static boolean validate(final String value) {
