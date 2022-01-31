@@ -9,6 +9,8 @@ import info.fermercentr.service.DataBaseService;
 import info.fermercentr.service.SendMessageBotService;
 import info.fermercentr.service.SendToODATA;
 import info.fermercentr.store.SessionData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -24,6 +26,8 @@ import static info.fermercentr.service.constants.Buttons.UNBLOCK;
 
 public class CoreBot extends TelegramLongPollingBot {
 
+    private final Logger log = LogManager.getLogger(this.getClass());
+
     private final String token = Config.getConfigTelegramSettings().getToken();
     private final String botName = Config.getConfigTelegramSettings().getBotName();
     private final Long groupId = Long.parseLong(Config.getConfigTelegramSettings().getGroup());
@@ -36,6 +40,9 @@ public class CoreBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             if (!groupId.equals(update.getMessage().getChatId()))  {
                 executeMessage(sendMessageBotService.accessDenied(update));
+                log.error("[Core] - User " + update.getMessage().getFrom().getId()
+                        + " " + update.getMessage().getFrom().getFirstName()
+                        + " trying to start Bot.");
             } else {
                 long userId = update.getMessage().getFrom().getId();
                 if (START.equals(update.getMessage().getText()) || START_ALT.equals(update.getMessage().getText())) {
@@ -147,6 +154,7 @@ public class CoreBot extends TelegramLongPollingBot {
             executeMessage(sendMessageBotService.sendingMayTakeTime(update));
             if (SendToODATA.send(userId, sd)) {
                 executeMessage(sendMessageBotService.successSending(update));
+                makeLogEntry(update, sd);
             } else {
                 executeMessage(sendMessageBotService.transferError(update));
             }
@@ -157,10 +165,19 @@ public class CoreBot extends TelegramLongPollingBot {
         executeMessage(sendMessageBotService.endMessage(update));
     }
 
+    private void makeLogEntry(final Update update, final SessionData sd) {
+        final String username = update.getMessage().getFrom().getFirstName();
+        final Order order = sd.getOrder(update.getMessage().getFrom().getId());
+        log.info("[Core] - User " + username
+                + "successfully send to 1C client data: " + order.getIdClient()
+                + " next:\n + " + order);
+    }
+
     private void executeMessage(SendMessage sendMessage) {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
+            log.error("[Core] - Error sending message to bot. " + e.getMessage());
             e.printStackTrace();
         }
     }

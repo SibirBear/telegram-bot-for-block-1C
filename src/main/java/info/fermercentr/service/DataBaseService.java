@@ -1,6 +1,8 @@
 package info.fermercentr.service;
 
 import info.fermercentr.config.Config;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.DriverManager;
 import java.sql.Connection;
@@ -11,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class DataBaseService {
+
+    private final Logger log = LogManager.getLogger(this.getClass());
 
     private final String URL = Config.getConfigDB().getHost();
     private final String USER = Config.getConfigDB().getUser();
@@ -27,6 +31,8 @@ public final class DataBaseService {
 
         String query = PROCEDURE + "(" + idClient + ")";
 
+        log.info("[DataBase] - Trying to connect DB...");
+
         try (Connection con = connect()) {
             stmt = con.createStatement();
             rs = stmt.executeQuery(query);
@@ -36,8 +42,10 @@ public final class DataBaseService {
                 result.add(rs.getString(CONST_INDEX_TWO));
                 result.add(rs.getString(CONST_INDEX_THREE));
             }
+            log.info("[DataBase] - Connect to DB successful!");
 
         } catch (SQLException e) {
+            log.error("[DataBase] - Connect to DB failed! " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -46,6 +54,7 @@ public final class DataBaseService {
                 try {
                     stmt.close();
                 } catch (SQLException ex) {
+                    log.error("[DataBase] - Error while close statement! " + ex.getMessage());
                     ex.printStackTrace();
                 }
             }
@@ -53,6 +62,7 @@ public final class DataBaseService {
                 try {
                     rs.close();
                 } catch (SQLException ex) {
+                    log.error("[DataBase] - Error while close Resultset SQL! " + ex.getMessage());
                     ex.printStackTrace();
                 }
             }

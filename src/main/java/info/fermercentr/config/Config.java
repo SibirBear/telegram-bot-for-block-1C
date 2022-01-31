@@ -1,5 +1,8 @@
 package info.fermercentr.config;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -10,10 +13,14 @@ public class Config {
     private static ConfigDB configDB;
     private static Config config;
 
+    private static final Logger log = LogManager.getLogger(Config.class);
+
     private static Config read(final Properties properties) {
         try (InputStream is = Config.class.getClassLoader().getResourceAsStream("config.properties")) {
+            log.info("[App Config] - Init configuration...");
             properties.load(is);
         } catch (IOException e) {
+            log.error("[App Config] - Error loading configuration! " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -34,6 +41,7 @@ public class Config {
     public static Config init() {
         Properties properties = new Properties();
         config = read(properties);
+        log.info("[App Config] - Init configuration successful!");
         return config;
     }
 
