@@ -5,11 +5,13 @@ public final class ConfigDB {
     private final String host;
     private final String user;
     private final String psw;
+    private final String procedure;
 
-    public ConfigDB(final String phost, final String puser, final String ppsw) {
-        this.host = phost;
-        this.user = puser;
-        this.psw = ppsw;
+    public ConfigDB(final String pHost, final String pUser, final String pPsw, final String pProcedure) {
+        this.host = pHost;
+        this.user = pUser;
+        this.psw = pPsw;
+        this.procedure = pProcedure;
     }
 
     public String getHost() {
@@ -22,5 +24,9 @@ public final class ConfigDB {
 
     public String getPsw() {
         return psw;
+    }
+
+    public String getProcedure() {
+        return procedure;
     }
 }

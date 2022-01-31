@@ -23,9 +23,10 @@ public class Config {
         String host = properties.getProperty("HOST");
         String user = properties.getProperty("USER");
         String psw = properties.getProperty("PSW");
+        String procedure = properties.getProperty("PROCEDURE");
 
         configTelegramSettings = new ConfigTelegramSettings(token, botName, groupId);
-        configDB = new ConfigDB(host, user, psw);
+        configDB = new ConfigDB(host, user, psw, procedure);
 
         return config;
     }
