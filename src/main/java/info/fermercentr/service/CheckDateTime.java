@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /*
- * Класс для проверки корректности(в соотвествии с установленными масками)
+ * Класс для проверки корректности(в соответствии с установленными масками)
  * введенных данных по запросу (дата и время)
 */
 public class CheckDateTime {
@@ -50,7 +50,7 @@ public class CheckDateTime {
         if (hours < MIN_TIME || hours > MAX_HOUR
                 || minutes < MIN_TIME || minutes > MAX_MINUTE) return false;
 
-        // в последнем выражении проверяем что введенное время больше текущего
+        // В последнем выражении проверяем что введенное время больше текущего
         // более чем на ХХ минуты. ХХ определяется константой.
         return LocalDateTime.of(LocalDate.parse(date), LocalTime.parse(time))
                 .isAfter(LocalDateTime.now().plusMinutes(ADD_MINUTES).withSecond(0).withNano(0));
@@ -70,7 +70,7 @@ public class CheckDateTime {
         if (month < LocalDate.MIN.getMonthValue() || month > LocalDate.MAX.getMonthValue()
                 || day < LocalDate.MIN.getDayOfMonth() || day > LocalDate.MAX.getDayOfMonth()) return false;
 
-        // в последнем выражении проверяем что введенная дата не больше текущей
+        // В последнем выражении проверяем что введенная дата не больше текущей
         // более чем на XX дней. ХХ определяется константой.
         return (LocalDate.parse(date).isBefore(LocalDate.now().plusDays(ADD_DAYS)))
                 && (LocalDate.parse(date).isAfter(LocalDate.now().minusDays(MINUS_DAYS)));

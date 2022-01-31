@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public final class SessionData {
+public class SessionData {
 
-    private Map<Long, Order> sessionData = new HashMap<>();
+    private final Map<Long, Order> sessionData = new HashMap<>();
 
     public void updateSessionData(final long userId, final Order order) {
         sessionData.put(userId, order);
@@ -22,12 +22,8 @@ public final class SessionData {
         return sessionData.containsKey(userId);
     }
 
-    public boolean remove(final long userId) {
-        if (this.sessionData.containsKey(userId) || !this.sessionData.isEmpty()) {
-            this.sessionData.remove(userId);
-            return true;
-        }
-        return false;
+    public void remove(final long userId) {
+        sessionData.keySet().removeIf(key -> key == userId);
     }
 
     @Override

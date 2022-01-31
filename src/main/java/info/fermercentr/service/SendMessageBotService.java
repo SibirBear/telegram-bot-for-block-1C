@@ -11,6 +11,7 @@ public final class SendMessageBotService {
 
     private ButtonsBotService button = new ButtonsBotService();
 
+    //Простое сообщение
     public SendMessage createSimpleMessage(Update update, String text) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
@@ -19,7 +20,7 @@ public final class SendMessageBotService {
         return sendMessage;
     }
 
-    //Простое сообщение с меню
+    //Простое сообщение с кнопками
     private SendMessage createMessageWithKeyboard(Update update, String text, ReplyKeyboardMarkup keyboard) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
@@ -28,12 +29,13 @@ public final class SendMessageBotService {
         return sendMessage;
     }
 
+    //Сообщения для STEPS
     public SendMessage startMessage(Update update) {
         return createSimpleMessage(update, "Добрый день, " + update.getMessage().getFrom().getFirstName() + "!");
     }
 
     public SendMessage accessDenied(Update update) {
-        return createSimpleMessage(update, SendMessageText.ACCESS_DENIED);
+        return createSimpleMessage(update, SendMessageText.ACCESS_DENIED + " " + update.getMessage().getChatId());
     }
 
     public SendMessage enterClientId(Update update) {
@@ -48,9 +50,7 @@ public final class SendMessageBotService {
     }
 
     public SendMessage dateMessage(Update update) {
-        SendMessage message = createSimpleMessage(update, SendMessageText.DATE_MESSAGE);
-        message.setReplyMarkup(new ReplyKeyboardRemove(true));
-        return message;
+        return createSimpleMessage(update, SendMessageText.DATE_MESSAGE);
     }
 
     public SendMessage timeMessage(Update update) {
@@ -74,4 +74,26 @@ public final class SendMessageBotService {
                 "Вы ввели:\n" + sd.getOrder(userId).toString() + "\n\nПрименить?",
                 button.createSelectMessage());
     }
+
+    public SendMessage sendingMayTakeTime(Update update) {
+        return createSimpleMessage(update, SendMessageText.SENDING_MAY_TAKE_SOME_TIME);
+    }
+
+    public SendMessage successSending(Update update) {
+        return createSimpleMessage(update, SendMessageText.SUCCESS_SENDING);
+    }
+
+    public SendMessage transferError(Update update) {
+        return createSimpleMessage(update, SendMessageText.TRANSFER_ERROR);
+    }
+
+    public SendMessage cancelMessage(Update update) {
+        return createSimpleMessage(update, SendMessageText.CANCEL);
+    }
+
+    public SendMessage endMessage(Update update) {
+        return createMessageWithKeyboard(update,
+                SendMessageText.END_STEPS, button.createStartButtonAlt());
+    }
+
 }
