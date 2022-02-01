@@ -1,5 +1,6 @@
 package info.fermercentr.service;
 
+import com.mysql.jdbc.Driver;
 import info.fermercentr.config.Config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -72,6 +73,7 @@ public final class DataBaseService {
     }
 
     private Connection connect() throws SQLException {
+        DriverManager.registerDriver(new Driver());
         return DriverManager.getConnection(URL, USER, PASS);
     }
 

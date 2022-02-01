@@ -169,7 +169,7 @@ public class CoreBot extends TelegramLongPollingBot {
         final String username = update.getMessage().getFrom().getFirstName();
         final Order order = sd.getOrder(update.getMessage().getFrom().getId());
         log.info("[Core] - User " + username
-                + "successfully send to 1C client data: " + order.getIdClient()
+                + " successfully send to 1C client data: " + order.getIdClient()
                 + " next:\n + " + order);
     }
 

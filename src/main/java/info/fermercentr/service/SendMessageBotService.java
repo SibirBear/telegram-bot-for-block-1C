@@ -12,7 +12,7 @@ public final class SendMessageBotService {
     private ButtonsBotService button = new ButtonsBotService();
 
     //Простое сообщение
-    public SendMessage createSimpleMessage(Update update, String text) {
+    private SendMessage createSimpleMessage(Update update, String text) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
         sendMessage.setText(text);
@@ -71,7 +71,7 @@ public final class SendMessageBotService {
 
     public SendMessage resultMessage(Update update, long userId, SessionData sd) {
         return createMessageWithKeyboard(update,
-                "Вы ввели:\n" + sd.getOrder(userId).toString() + "\n\nПрименить?",
+                "Вы ввели:\n" + sd.getOrder(userId).toString() + "\n\nОтправить?",
                 button.createSelectMessage());
     }
 

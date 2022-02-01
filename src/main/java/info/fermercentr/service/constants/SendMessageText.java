@@ -9,7 +9,7 @@ public class SendMessageText {
     public static final String DATE_INVALID = "Не верный формат даты!\nДолжен быть: ГГГГ-ММ-ДД.";
     public static final String TIME_MESSAGE = "Укажите время начала блокировки.\nФормат ввода времени(24ч): ЧЧ:ММ";
     public static final String TIME_INVALID = "Не верный формат времени!\nДолжен быть: ЧЧ:ММ.";
-    public static final String SENDING_MAY_TAKE_SOME_TIME = "Отправка может занять некоторое время.\n Подождите...";
+    public static final String SENDING_MAY_TAKE_SOME_TIME = "Отправка может занять некоторое время.\nПодождите...";
     public static final String SUCCESS_SENDING = "Введенные данные успешно применены.";
     public static final String TRANSFER_ERROR = "Ошибка передачи данных.";
     public static final String CANCEL = "Отменено.";
