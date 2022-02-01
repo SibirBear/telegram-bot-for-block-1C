@@ -27,3 +27,4 @@ hs_err_pid*
 /src/main/resources/config.properties
 /docs/
 
+/projects-logs/
