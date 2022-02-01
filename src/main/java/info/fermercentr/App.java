@@ -8,23 +8,34 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-public class App {
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.servlet.http.HttpServlet;
+
+@Startup
+@Singleton(name = "Telegram-bot-for-block-1C")
+public class App extends HttpServlet {
 
     private static final Logger log = LogManager.getLogger(App.class);
 
-    public static void main(String[] args) {
-
+    @Override
+    public void init() {
         Config.init();
 
         TelegramBotsApi botsApi;
         try {
             botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new CoreBot());
-            log.info("[App Start] - App is starting!");
+            log.info("[App] - App is starting!");
         } catch (TelegramApiException e) {
-            log.error("[App Start] - Error starting app. " + e.getMessage());
+            log.error("[App] - Error starting app. " + e.getMessage());
         }
 
+    }
+
+    @Override
+    public void destroy() {
+        log.info("[App] - App is stopped!");
     }
 
 }
