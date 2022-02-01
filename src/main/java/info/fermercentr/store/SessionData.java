@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SessionData {
+public final class SessionData {
 
     private final Map<Long, Order> sessionData = new HashMap<>();
 

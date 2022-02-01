@@ -24,7 +24,7 @@ import static info.fermercentr.service.constants.Buttons.BLOCK;
 import static info.fermercentr.service.constants.Buttons.OK;
 import static info.fermercentr.service.constants.Buttons.UNBLOCK;
 
-public class CoreBot extends TelegramLongPollingBot {
+public final class CoreBot extends TelegramLongPollingBot {
 
     private final Logger log = LogManager.getLogger(this.getClass());
 
@@ -62,7 +62,7 @@ public class CoreBot extends TelegramLongPollingBot {
 
         Steps currentStep = sd.getOrder(userId).getCurrentStep();
 
-        switch(currentStep) {
+        switch (currentStep) {
             case STEP1:
                 stepOne(update);
                 break;
@@ -86,6 +86,8 @@ public class CoreBot extends TelegramLongPollingBot {
             case STEP6:
                 stepSix(update, userId);
                 break;
+
+            default: break;
 
         }
 
@@ -123,6 +125,8 @@ public class CoreBot extends TelegramLongPollingBot {
                 sd.getOrder(userId).setCurrentStep(Steps.STEP6);
                 executeMessage(sendMessageBotService.resultMessage(update, userId, sd));
                 break;
+
+            default:break;
         }
     }
 

@@ -11,7 +11,7 @@ import static info.fermercentr.service.ButtonsBotBuilder.createRowButtonList;
 import static info.fermercentr.service.ButtonsBotBuilder.createRowButtons;
 import static info.fermercentr.service.ButtonsBotBuilder.setKeyboardMessage;
 
-public class ButtonsBotService {
+public final class ButtonsBotService {
 
     public ReplyKeyboardMarkup createBlockMessage() {
         return setKeyboardMessage(

@@ -1,6 +1,6 @@
 package info.fermercentr.model;
 
-public class Order {
+public final class Order {
 
     private String idClient;
     private Steps currentStep;
@@ -9,8 +9,8 @@ public class Order {
     private String time;
     private OData odata;
 
-    public Order(Steps currentStep) {
-        this.currentStep = currentStep;
+    public Order(Steps pCurrentStep) {
+        this.currentStep = pCurrentStep;
     }
 
     public String getIdClient() {
@@ -37,36 +37,34 @@ public class Order {
         return time;
     }
 
-    public void setIdClient(String idClient) {
-        this.idClient = idClient;
+    public void setIdClient(String pIdClient) {
+        this.idClient = pIdClient;
     }
 
-    public void setCurrentStep(Steps currentStep) {
-        this.currentStep = currentStep;
+    public void setCurrentStep(Steps pCurrentStep) {
+        this.currentStep = pCurrentStep;
     }
 
-    public void setActionBlock(boolean actionBlock) {
-        this.actionBlock = actionBlock;
+    public void setActionBlock(boolean pActionBlock) {
+        this.actionBlock = pActionBlock;
     }
 
-    public void setOdata(OData odata) {
-        this.odata = odata;
+    public void setOdata(OData pOdata) {
+        this.odata = pOdata;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDate(String pDate) {
+        this.date = pDate;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setTime(String pTime) {
+        this.time = pTime;
     }
 
     @Override
     public String toString() {
-        return  "Клиент = " + idClient + "\n" +
-                //"Блокировать = " + actionBlock + "\n" +
-                (actionBlock ? "Заблокировать" : "Разблокировать") + "\n" +
-                "Дата = " + date + "\n" +
-                "Время = " + time;
+        return  "Клиент = " + idClient + "\n"
+                + (actionBlock ? "Заблокировать" : "Разблокировать") + "\n"
+                + "Дата = " + date + "\n" + "Время = " + time;
     }
 }

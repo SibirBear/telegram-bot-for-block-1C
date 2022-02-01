@@ -4,7 +4,11 @@ import info.fermercentr.store.SessionData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -14,7 +18,7 @@ import java.util.Base64;
 
 public final class SendToODATA {
 
-    private static final Logger log = LogManager.getLogger(SendToODATA.class);
+    private static final Logger LOG = LogManager.getLogger(SendToODATA.class);
     private static final String REGISTER_TYPE_ODATA = "/InformationRegister";
     private static final String REGISTER_ODATA = "_ум_БлокировкаВходаВПрограмму";
 
@@ -36,7 +40,7 @@ public final class SendToODATA {
             dateTime = date + "T" + time + ":00";
         }
 
-        log.info("[ODATA] - Trying to sent record to 1C ODATA...");
+        LOG.info("[ODATA] - Trying to sent record to 1C ODATA...");
 
         try {
             URL connectUrl = new URL(url + REGISTER_TYPE_ODATA
@@ -65,17 +69,17 @@ public final class SendToODATA {
                 String err;
                 BufferedReader br = new BufferedReader(new InputStreamReader(er));
 
-                while((err = br.readLine()) != null) {
-                    log.error("[ODATA] " + err);
+                while ((err = br.readLine()) != null) {
+                    LOG.error("[ODATA] " + err);
                 }
             }
 
             con.disconnect();
 
-            log.info("[ODATA] - Sending record to 1C ODATA successful.");
+            LOG.info("[ODATA] - Sending record to 1C ODATA successful.");
 
         } catch (IOException e) {
-            log.error("[ODATA] - Error sending record. " + e.getMessage());
+            LOG.error("[ODATA] - Error sending record. " + e.getMessage());
             e.printStackTrace();
         }
 

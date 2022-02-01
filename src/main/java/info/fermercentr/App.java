@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServlet;
 
 @Startup
 @Singleton(name = "Telegram-bot-for-block-1C")
-public class App extends HttpServlet {
+public final class App extends HttpServlet {
 
-    private static final Logger log = LogManager.getLogger(App.class);
+    private static final Logger LOG = LogManager.getLogger(App.class);
 
     @Override
     public void init() {
@@ -26,16 +26,16 @@ public class App extends HttpServlet {
         try {
             botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new CoreBot());
-            log.info("[App] - App is starting!");
+            LOG.info("[App] - App is starting!");
         } catch (TelegramApiException e) {
-            log.error("[App] - Error starting app. " + e.getMessage());
+            LOG.error("[App] - Error starting app. " + e.getMessage());
         }
 
     }
 
     @Override
     public void destroy() {
-        log.info("[App] - App is stopped!");
+        LOG.info("[App] - App is stopped!");
     }
 
 }
