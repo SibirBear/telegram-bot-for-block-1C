@@ -15,4 +15,6 @@ public class SendMessageText {
     public static final String CANCEL = "Отменено.";
     public static final String END_STEPS = "Для создания еще одной записи наберите \"/start\" или нажмите кнопку \"СТАРТ\".";
 
+    public static final String ERROR = "Ошибочный ввод. Повторите.";
+
 }

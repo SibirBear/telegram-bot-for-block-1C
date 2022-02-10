@@ -4,7 +4,9 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
          http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-    <display-name>Telegram-bot-for-block-1C</display-name>
+
+    <!--    for Tomcat    -->
+    <!--<display-name>Telegram-bot-for-block-1C</display-name>
     <servlet>
         <servlet-name>Telegram-bot-for-block-1C</servlet-name>
         <servlet-class>info.fermercentr.App</servlet-class>
@@ -12,6 +14,6 @@
     <servlet-mapping>
         <servlet-name>Telegram-bot-for-block-1C</servlet-name>
         <url-pattern>/</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
 
 </web-app>

@@ -5,11 +5,13 @@ public final class OData {
     private final String url;
     private final String user;
     private final String pass;
+    private final String name;
 
-    public OData(final String purl, final String puser, final String ppass) {
-        this.url = purl;
-        this.user = puser;
-        this.pass = ppass;
+    public OData(final String pUrl, final String pUser, final String pPass, final String pName) {
+        this.url = pUrl;
+        this.user = pUser;
+        this.pass = pPass;
+        this.name = pName;
     }
 
     public String getUrl() {
@@ -22,5 +24,9 @@ public final class OData {
 
     public String getPass() {
         return pass;
+    }
+
+    public String getName() {
+        return name;
     }
 }

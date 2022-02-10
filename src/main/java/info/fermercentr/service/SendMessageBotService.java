@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 
-public final class SendMessageBotService {
+public class SendMessageBotService {
 
     private ButtonsBotService button = new ButtonsBotService();
 
@@ -96,4 +96,11 @@ public final class SendMessageBotService {
                 SendMessageText.END_STEPS, button.createStartButtonAlt());
     }
 
+    public SendMessage clientName(Update update, String idClient, String name) {
+        return createSimpleMessage(update, "Вы выбрали: " + idClient + " " + name);
+    }
+
+    public SendMessage errorMessage(Update update) {
+        return createSimpleMessage(update, SendMessageText.ERROR);
+    }
 }

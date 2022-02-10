@@ -13,7 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class DataBaseService {
+public class DataBaseService {
 
     private final Logger log = LogManager.getLogger(this.getClass());
 
@@ -24,6 +24,7 @@ public final class DataBaseService {
     private final int CONST_INDEX_ONE = 1;
     private final int CONST_INDEX_TWO = 2;
     private final int CONST_INDEX_THREE = 3;
+    private final int CONST_INDEX_FOUR = 4;
 
     public List<String> getData(final String idClient) {
         List<String> result = new ArrayList<>();
@@ -42,6 +43,7 @@ public final class DataBaseService {
                 result.add(rs.getString(CONST_INDEX_ONE));
                 result.add(rs.getString(CONST_INDEX_TWO));
                 result.add(rs.getString(CONST_INDEX_THREE));
+                result.add(rs.getString(CONST_INDEX_FOUR));
             }
             log.info("[DataBase] - Connect to DB successful!");
 

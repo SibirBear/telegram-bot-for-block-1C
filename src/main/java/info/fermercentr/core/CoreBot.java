@@ -16,6 +16,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static info.fermercentr.core.CoreBotConstants.START;
@@ -24,7 +26,7 @@ import static info.fermercentr.service.constants.Buttons.BLOCK;
 import static info.fermercentr.service.constants.Buttons.OK;
 import static info.fermercentr.service.constants.Buttons.UNBLOCK;
 
-public final class CoreBot extends TelegramLongPollingBot {
+public class CoreBot extends TelegramLongPollingBot {
 
     private final Logger log = LogManager.getLogger(this.getClass());
 
@@ -100,11 +102,17 @@ public final class CoreBot extends TelegramLongPollingBot {
 
     private void stepTwo(Update update, long userId) {
         String idClient = update.getMessage().getText();
-        List<String> data = dbs.getData(idClient);
-        if (data.size() > 0) {
-            sd.getOrder(userId).setOdata(new OData(data.get(0), data.get(1), data.get(2)));
+        List<String> data = Collections.synchronizedList(new ArrayList<>());
+
+        if (isInteger(idClient)) {
+            data = dbs.getData(idClient);
+        }
+
+        if (data != null && data.size() > 0) {
+            sd.getOrder(userId).setOdata(new OData(data.get(0), data.get(1), data.get(2), data.get(3)));
             sd.getOrder(userId).setIdClient(idClient);
             sd.getOrder(userId).setCurrentStep(Steps.STEP3);
+            executeMessage(sendMessageBotService.clientName(update, idClient, data.get(3)));
             executeMessage(sendMessageBotService.blockMessage(update));
         } else {
             executeMessage(sendMessageBotService.enterClientIdError(update));
@@ -113,11 +121,12 @@ public final class CoreBot extends TelegramLongPollingBot {
 
     private void stepThree(Update update, long userId) {
         String selected = update.getMessage().getText();
-        sd.getOrder(userId).setCurrentStep(Steps.STEP4);
+
         switch (selected) {
             case BLOCK:
-                executeMessage(sendMessageBotService.dateMessage(update));
                 sd.getOrder(userId).setActionBlock(true);
+                sd.getOrder(userId).setCurrentStep(Steps.STEP4);
+                executeMessage(sendMessageBotService.dateMessage(update));
                 break;
 
             case UNBLOCK:
@@ -126,7 +135,10 @@ public final class CoreBot extends TelegramLongPollingBot {
                 executeMessage(sendMessageBotService.resultMessage(update, userId, sd));
                 break;
 
-            default:break;
+            default:
+                executeMessage(sendMessageBotService.errorMessage(update));
+                executeMessage(sendMessageBotService.blockMessage(update));
+                break;
         }
     }
 
@@ -175,6 +187,15 @@ public final class CoreBot extends TelegramLongPollingBot {
         log.info("[Core] - User " + username
                 + " successfully send to 1C client data: " + order.getIdClient()
                 + " next:\n + " + order);
+    }
+
+    private boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     private void executeMessage(SendMessage sendMessage) {
