@@ -63,8 +63,8 @@ public final class Order {
 
     @Override
     public String toString() {
-        return  "Клиент = " + idClient + "\n"
-                + (actionBlock ? "Заблокировать" : "Разблокировать") + "\n"
-                + "Дата = " + date + "\n" + "Время = " + time;
+        return  "Клиент = " + idClient + ", "
+                + (actionBlock ? "Заблокировать" : "Разблокировать") + ", "
+                + "Дата = " + date + ", " + "Время = " + time + ".\n";
     }
 }

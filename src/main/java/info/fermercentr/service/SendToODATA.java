@@ -64,7 +64,9 @@ public final class SendToODATA {
 
             result = con.getResponseCode() == 200;
 
-            if (!result) {
+            if (result) {
+                LOG.info("[ODATA] - Sending record to 1C ODATA successful.");
+            } else {
                 InputStream er = con.getErrorStream();
                 String err;
                 BufferedReader br = new BufferedReader(new InputStreamReader(er));
@@ -75,8 +77,6 @@ public final class SendToODATA {
             }
 
             con.disconnect();
-
-            LOG.info("[ODATA] - Sending record to 1C ODATA successful.");
 
         } catch (IOException e) {
             LOG.error("[ODATA] - Error sending record. " + e.getMessage());

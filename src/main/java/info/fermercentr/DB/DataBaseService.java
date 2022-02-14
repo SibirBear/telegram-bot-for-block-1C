@@ -1,4 +1,4 @@
-package info.fermercentr.service;
+package info.fermercentr.DB;
 
 import com.mysql.jdbc.Driver;
 import info.fermercentr.config.Config;
@@ -13,6 +13,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import static info.fermercentr.DB.DataBaseConstants.CONST_INDEX_FOUR;
+import static info.fermercentr.DB.DataBaseConstants.CONST_INDEX_ONE;
+import static info.fermercentr.DB.DataBaseConstants.CONST_INDEX_THREE;
+import static info.fermercentr.DB.DataBaseConstants.CONST_INDEX_TWO;
+
 public class DataBaseService {
 
     private final Logger log = LogManager.getLogger(this.getClass());
@@ -21,23 +26,17 @@ public class DataBaseService {
     private final String USER = Config.getConfigDB().getUser();
     private final String PASS = Config.getConfigDB().getPsw();
     private final String PROCEDURE = Config.getConfigDB().getProcedure();
-    private final int CONST_INDEX_ONE = 1;
-    private final int CONST_INDEX_TWO = 2;
-    private final int CONST_INDEX_THREE = 3;
-    private final int CONST_INDEX_FOUR = 4;
 
     public List<String> getData(final String idClient) {
         List<String> result = new ArrayList<>();
-        Statement stmt = null;
-        ResultSet rs = null;
 
         String query = PROCEDURE + "(" + idClient + ")";
 
-        log.info("[DataBase] - Trying to connect DB...");
+        log.info("[DataBaseMySQL] - Trying to connect DB...");
 
-        try (Connection con = connect()) {
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+        try (Connection con = connect();
+             Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 result.add(rs.getString(CONST_INDEX_ONE));
@@ -45,30 +44,11 @@ public class DataBaseService {
                 result.add(rs.getString(CONST_INDEX_THREE));
                 result.add(rs.getString(CONST_INDEX_FOUR));
             }
-            log.info("[DataBase] - Connect to DB successful!");
+            log.info("[DataBaseMySQL] - Connect to DB successful!");
 
         } catch (SQLException e) {
-            log.error("[DataBase] - Connect to DB failed! " + e.getMessage());
+            log.error("[DataBaseMySQL] - Connect to DB failed! " + e.getMessage());
             e.printStackTrace();
-        }
-
-        finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException ex) {
-                    log.error("[DataBase] - Error while close statement! " + ex.getMessage());
-                    ex.printStackTrace();
-                }
-            }
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException ex) {
-                    log.error("[DataBase] - Error while close Resultset SQL! " + ex.getMessage());
-                    ex.printStackTrace();
-                }
-            }
         }
 
         return result;
