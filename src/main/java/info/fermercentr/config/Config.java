@@ -11,6 +11,7 @@ public class Config {
 
     private static ConfigTelegramSettings configTelegramSettings;
     private static ConfigDB configDB;
+    private static ConfigMSDB configMSDB;
     private static Config config;
 
     private static final Logger LOG = LogManager.getLogger(Config.class);
@@ -31,9 +32,14 @@ public class Config {
         String user = properties.getProperty("USER");
         String psw = properties.getProperty("PSW");
         String procedure = properties.getProperty("PROCEDURE");
+        String hostMs = properties.getProperty("HOSTMS");
+        String userMs = properties.getProperty("USERMS");
+        String pswMs = properties.getProperty("PSWMS");
+        String tableMs = properties.getProperty("TABLEMS");
 
         configTelegramSettings = new ConfigTelegramSettings(token, botName, groupId);
         configDB = new ConfigDB(host, user, psw, procedure);
+        configMSDB = new ConfigMSDB(hostMs, userMs, pswMs, tableMs);
 
         return config;
     }
@@ -53,4 +59,7 @@ public class Config {
         return configDB;
     }
 
+    public static ConfigMSDB getConfigDBMS() {
+        return configMSDB;
+    }
 }
