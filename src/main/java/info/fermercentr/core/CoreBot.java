@@ -1,11 +1,11 @@
 package info.fermercentr.core;
 
+import info.fermercentr.DB.DataBaseMSSQL;
 import info.fermercentr.config.Config;
 import info.fermercentr.model.OData;
 import info.fermercentr.model.Order;
 import info.fermercentr.model.Steps;
 import info.fermercentr.service.CheckDateTime;
-import info.fermercentr.service.DataBaseService;
 import info.fermercentr.service.SendMessageBotService;
 import info.fermercentr.service.SendToODATA;
 import info.fermercentr.store.SessionData;
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static info.fermercentr.DB.DataBaseService.getData;
 import static info.fermercentr.core.CoreBotConstants.START;
 import static info.fermercentr.core.CoreBotConstants.START_ALT;
 import static info.fermercentr.service.constants.Buttons.BLOCK;
@@ -35,7 +36,6 @@ public class CoreBot extends TelegramLongPollingBot {
     private final Long groupId = Long.parseLong(Config.getConfigTelegramSettings().getGroup());
     private final SendMessageBotService sendMessageBotService = new SendMessageBotService();
     private final SessionData sd = new SessionData();
-    private final DataBaseService dbs = new DataBaseService();
 
     @Override
     public synchronized void onUpdateReceived(Update update) {
@@ -105,10 +105,10 @@ public class CoreBot extends TelegramLongPollingBot {
         List<String> data = Collections.synchronizedList(new ArrayList<>());
 
         if (isInteger(idClient)) {
-            data = dbs.getData(idClient);
+            data = getData(idClient);
         }
 
-        if (data != null && data.size() > 0) {
+        if (data.size() > 0) {
             sd.getOrder(userId).setOdata(new OData(data.get(0), data.get(1), data.get(2), data.get(3)));
             sd.getOrder(userId).setIdClient(idClient);
             sd.getOrder(userId).setCurrentStep(Steps.STEP3);
@@ -169,14 +169,17 @@ public class CoreBot extends TelegramLongPollingBot {
         if (approve.equals(OK)) {
             executeMessage(sendMessageBotService.sendingMayTakeTime(update));
             if (SendToODATA.send(userId, sd)) {
+                DataBaseMSSQL.insertDB(userId, sd);
                 executeMessage(sendMessageBotService.successSending(update));
                 makeLogEntry(update, sd);
             } else {
                 executeMessage(sendMessageBotService.transferError(update));
             }
+
         } else {
             executeMessage(sendMessageBotService.cancelMessage(update));
         }
+
         sd.remove(userId);
         executeMessage(sendMessageBotService.endMessage(update));
     }
@@ -186,7 +189,7 @@ public class CoreBot extends TelegramLongPollingBot {
         final Order order = sd.getOrder(update.getMessage().getFrom().getId());
         log.info("[Core] - User " + username
                 + " successfully send to 1C client data: " + order.getIdClient()
-                + " next:\n + " + order);
+                + " next: " + order);
     }
 
     private boolean isInteger(String s) {
