@@ -17,10 +17,16 @@
                 <SizeBasedTriggeringPolicy size="5 MB"/>
             </Policies>
         </RollingFile>
+        <Console name="STDOUT">
+            <PatternLayout>
+                <pattern>${pattern}</pattern>
+            </PatternLayout>
+        </Console>
     </Appenders>
     <Loggers>
-        <Root name = "TelegramBotForBlock1C" level="INFO">
+        <Root level="INFO">
             <AppenderRef ref="RollingFile" />
+            <AppenderRef ref="STDOUT"/>
         </Root>
     </Loggers>
 </Configuration>
