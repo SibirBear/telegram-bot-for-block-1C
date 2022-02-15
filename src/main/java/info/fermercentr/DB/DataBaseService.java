@@ -20,14 +20,14 @@ import static info.fermercentr.DB.DataBaseConstants.CONST_INDEX_TWO;
 
 public class DataBaseService {
 
-    private final Logger log = LogManager.getLogger(this.getClass());
+    private static final Logger log = LogManager.getLogger(DataBaseService.class);
 
-    private final String URL = Config.getConfigDB().getHost();
-    private final String USER = Config.getConfigDB().getUser();
-    private final String PASS = Config.getConfigDB().getPsw();
-    private final String PROCEDURE = Config.getConfigDB().getProcedure();
+    private static final String URL = Config.getConfigDB().getHost();
+    private static final String USER = Config.getConfigDB().getUser();
+    private static final String PASS = Config.getConfigDB().getPsw();
+    private static final String PROCEDURE = Config.getConfigDB().getProcedure();
 
-    public List<String> getData(final String idClient) {
+    public static List<String> getData(final String idClient) {
         List<String> result = new ArrayList<>();
 
         String query = PROCEDURE + "(" + idClient + ")";
@@ -54,7 +54,7 @@ public class DataBaseService {
         return result;
     }
 
-    private Connection connect() throws SQLException {
+    private static Connection connect() throws SQLException {
         DriverManager.registerDriver(new Driver());
         return DriverManager.getConnection(URL, USER, PASS);
     }
