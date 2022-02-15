@@ -9,16 +9,25 @@ For deploy on Tomcat need edit web.xml and App.java (add HttpServlet).
 
 Add configuration file in _src/main/resources_ with:
 
-'# for TelegramBot  
-TOKEN =  
-BOTNAME =  
-GROUP =  
+    ## for TelegramBot  
+    TOKEN =  
+    BOTNAME =  
+    GROUP =  
 
-'# for MYSQL DB  
-HOST =  
-USER =  
-PSW =  
-PROCEDURE =  
+    ## for MYSQL DB  
+    HOST =  
+    USER =  
+    PSW =  
+    PROCEDURE =
+    
+    ## for MS SQL
+    HOSTMS = 
+    USERMS = 
+    PSWMS = 
+    TABLEMS = 
+
 
 In DB MySQL created procedure which return OData connect content by id client, which enter in request TG Bot.
 Name and call procedure write in config file at "PROCEDURE" like "PROCEDURE = call get_OData_content".
+
+In DB MSSQL used to record the final action performed by the user in Bot. 
